@@ -4,27 +4,38 @@ import com.project.users_service.dto.UserRequest;
 import com.project.users_service.dto.UserResponse;
 import com.project.users_service.entity.User;
 import com.project.users_service.exception.AlreadyExistException;
+import com.project.users_service.exception.SomethingWrongException;
 import com.project.users_service.exception.UserNotFoundException;
 import com.project.users_service.mapper.UserMapper;
 import com.project.users_service.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.mapstruct.control.MappingControl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
+    private KeycloakService keycloakService;
+
+
+    public UserServiceImpl(KeycloakService keycloakService, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.keycloakService = keycloakService;
+
+    }
+
 
     @Override
     public UserResponse addUser(UserRequest userRequest) {
         if(getUserByEmail(userRequest.getEmail())){
-            throw new AlreadyExistException();
+            throw new AlreadyExistException( userRequest.getEmail());
+        }
+
+        if(!keycloakService.createUserKeycloak(userRequest)) {
+            throw new SomethingWrongException();
         }
 
         User userToSave = UserMapper.mapper.userRequestToUser(userRequest);
@@ -62,13 +73,14 @@ public class UserServiceImpl implements UserService{
     }
 
     public User helper(String idUser){
-        return userRepository.findById(idUser).orElseThrow(
-                UserNotFoundException::new);
+        return userRepository.findById(idUser).orElseThrow(()-> new UserNotFoundException(idUser));
     }
     public boolean getUserByEmail(String email){
         Optional<User> user= userRepository.findByEmail(email);
         return user.isPresent();
     }
+
+
 
 
 }
