@@ -18,6 +18,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         types.print.banner: false
         format_sql: true
+  application:
+    name: orders-service
 
 eureka:
   client:

@@ -1,15 +1,11 @@
-package com.project.users_service.dto;
+package com.project.orders_service.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Setter
 @Getter
-public class UserResponse {
+public class UserDto {
 
     private String idUser;
     private String userName;

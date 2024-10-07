@@ -16,6 +16,6 @@ public class OrderDto {
 
     private String idOrder;
     private List<OrderLineDto> ordersLineDto;
-    private String idUser;
+    private UserDto userDto;
 
 }

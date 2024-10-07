@@ -1,6 +1,7 @@
 package com.project.products_service.service;
 
 import com.project.products_service.codegen.types.ProductDto;
+import com.project.products_service.dto.OrderLineDto;
 import com.project.products_service.entity.Product;
 import com.project.products_service.exception.ProductNotFoundException;
 import com.project.products_service.mapper.ProductMapper;
@@ -52,6 +53,13 @@ public class ProductServiceImpl implements ProductService{
         Product product = helper(idProduct);
         productRepository.delete(product);
         return "product deleted";
+    }
+
+    @Override
+    public boolean checkProductInStock(List<OrderLineDto> orderLineDtos) {
+        return orderLineDtos.stream().allMatch(
+                orderLineDto -> orderLineDto.getQuantity() <= helper(orderLineDto.getIdProduct()).getQuantity());
+
     }
 
     public Product helper(String idProduct) {
