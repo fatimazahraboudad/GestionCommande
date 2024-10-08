@@ -16,6 +16,5 @@ public interface OrderService {
 
     String deleteOrder(String idOrder);
 
-    Boolean test(List<OrderLineDto> orderLineDto);
 
 }

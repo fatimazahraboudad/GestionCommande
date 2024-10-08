@@ -11,7 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
-
 public class OrderLineDto {
 
     private String idOrderLine;

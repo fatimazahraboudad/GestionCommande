@@ -53,8 +53,5 @@ public class ProductController {
         return productService.deleteProductById(idProduct);
     }
 
-    @PostMapping
-    public boolean checkProductInStock(@RequestBody List<OrderLineDto> orderLineDtos) {
-        return productService.checkProductInStock(orderLineDtos);
-    }
+
 }

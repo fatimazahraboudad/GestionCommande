@@ -1,11 +1,12 @@
 package com.project.orders_service.controller;
 
+import com.project.orders_service.dto.OrderDto;
 import com.project.orders_service.dto.OrderLineDto;
 import com.project.orders_service.dto.UserDto;
-import com.project.orders_service.feignClient.OrderProduct;
-import com.project.orders_service.feignClient.OrderUser;
+import com.project.orders_service.feignClient.OrderUserFeignClient;
 import com.project.orders_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,17 +17,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderUser orderUserService;
+    private final OrderUserFeignClient orderUserFeignClientService;
     private final OrderService orderService;
 
 
-    @GetMapping("/{idUser}")
-    public ResponseEntity<UserDto> test(@PathVariable String idUser) {
-        return orderUserService.getUserById(idUser);
+    @PostMapping
+    public ResponseEntity<OrderDto> addOrder(@RequestBody OrderDto orderDto) {
+        return new ResponseEntity<>(orderService.addOrder(orderDto), HttpStatus.CREATED);
     }
 
-    @PostMapping
-    public boolean test(@RequestBody List<OrderLineDto> orderLineDtoList) {
-        return orderService.test(orderLineDtoList);
+    @GetMapping("{idOrder}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable String idOrder) {
+        return new ResponseEntity<>(orderService.getOrderById(idOrder), HttpStatus.OK);
     }
+
+    @GetMapping()
+    public ResponseEntity<List<OrderDto>> getAllOrders() {
+        return new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+    }
+
+
+
+
+
+
+
 }

@@ -15,12 +15,10 @@ import lombok.Setter;
 @Getter
 public class OrderLine {
 
-
     @Id
     private String idOrderLine;
     private String idProduct;
     private int quantity;
-
     @ManyToOne
     private Order order;
 

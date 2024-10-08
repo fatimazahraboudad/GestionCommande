@@ -15,7 +15,7 @@ import java.util.List;
 public class OrderDto {
 
     private String idOrder;
-    private List<OrderLineDto> ordersLineDto;
+    private List<OrderLineDto> ordersLine;
     private UserDto userDto;
 
 }

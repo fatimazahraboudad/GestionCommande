@@ -7,7 +7,6 @@ type Mutation {
 type Query{
     getProducts: [Product]
     getProductById(idProduct:String): Product
-    checkProductInStock(orderLineDtos :[OrderLineDto]) : Boolean
 }
 
 
@@ -26,9 +25,4 @@ input ProductDto{
     quantity : Int
 }
 
-input OrderLineDto{
-    idOrderLine : String,
-    idProduct : String,
-    quantity : Int,
-    idOrder : String
-}
+

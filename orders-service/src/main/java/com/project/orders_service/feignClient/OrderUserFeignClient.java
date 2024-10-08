@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "users-service")
-public interface OrderUser {
+public interface OrderUserFeignClient {
 
     @GetMapping("user/{idUser}")
     public ResponseEntity<UserDto> getUserById(@PathVariable String idUser);

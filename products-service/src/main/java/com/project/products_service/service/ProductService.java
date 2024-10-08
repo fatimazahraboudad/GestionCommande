@@ -15,6 +15,7 @@ public interface ProductService {
     Product updateProduct(String idProduct,ProductDto productDto);
     String deleteProductById(String idProduct);
     boolean checkProductInStock(List<OrderLineDto> orderLineDto);
+    String decrementQuantityOfProduct(List<OrderLineDto> orderLineDto);
 
 
 }
