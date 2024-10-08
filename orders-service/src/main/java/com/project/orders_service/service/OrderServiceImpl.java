@@ -12,6 +12,7 @@ import com.project.orders_service.mapper.OrderLineMapper;
 import com.project.orders_service.mapper.OrderMapper;
 import com.project.orders_service.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ public class OrderServiceImpl implements OrderService{
     private final OrderMapper orderMapper;
     private final OrderProductFeignClient orderProductFeignClient;
     private final OrderUserFeignClient orderUserFeignClient;
+    private final StreamBridge streamBridge;
+
 
 
     @Override
@@ -51,7 +54,15 @@ public class OrderServiceImpl implements OrderService{
         order.setDeleted(false);
 
         orderProductFeignClient.decrementQuantityOfProduct(orderDto.getOrdersLine());
-        return orderMapper.OrderToOrderDto(orderRepository.save(order));
+
+        Order order1 = orderRepository.save(order);
+        if (order1 != null) {
+            streamBridge.send("notification-topic",
+                    String.format("Your order with ID %s has been registered successfully.", order1.getIdOrder()));
+        }
+
+
+        return orderMapper.OrderToOrderDto(order1);
     }
 
     @Override

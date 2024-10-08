@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: notification-service
+  cloud:
+    stream:
+      bindings:
+        consumeNotif-in-0:
+          destination: notification-topic
+      kafka:
+        binder:
+          brokers: localhost:9092
+server:
+  port: 0

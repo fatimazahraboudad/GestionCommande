@@ -6,11 +6,13 @@ import com.project.orders_service.dto.UserDto;
 import com.project.orders_service.feignClient.OrderUserFeignClient;
 import com.project.orders_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/order")
@@ -24,6 +26,8 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> addOrder(@RequestBody OrderDto orderDto) {
         return new ResponseEntity<>(orderService.addOrder(orderDto), HttpStatus.CREATED);
+
+
     }
 
     @GetMapping("/{idOrder}")

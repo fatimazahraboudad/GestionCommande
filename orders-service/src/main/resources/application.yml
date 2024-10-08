@@ -20,7 +20,14 @@ spring:
         format_sql: true
   application:
     name: orders-service
-
+  cloud:
+    stream:
+      bindings:
+        consumeNotif-out-0:
+          destination: notification-topic
+      kafka:
+        binder:
+          brokers: localhost:9092
 eureka:
   client:
     serviceUrl:
