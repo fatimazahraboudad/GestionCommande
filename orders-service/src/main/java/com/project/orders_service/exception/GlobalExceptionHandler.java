@@ -18,5 +18,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(ProductQuantityVerification.class)
+    public ResponseEntity<String> handleProductQuantityVerification(ProductQuantityVerification ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
 
 }

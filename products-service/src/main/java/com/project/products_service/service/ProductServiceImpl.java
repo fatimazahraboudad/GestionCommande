@@ -67,7 +67,7 @@ public class ProductServiceImpl implements ProductService{
         orderLineDto.forEach(orderLineDto1 -> {
             Product product= helper(orderLineDto1.getIdProduct());
             product.setQuantity(product.getQuantity()-orderLineDto1.getQuantity());
-            updateProduct(orderLineDto1.getIdProduct(),ProductMapper.mapper.productToProductDto(product));
+            productRepository.save(product);
         });
         return "test";
     }

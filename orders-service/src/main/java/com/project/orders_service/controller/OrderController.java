@@ -26,14 +26,24 @@ public class OrderController {
         return new ResponseEntity<>(orderService.addOrder(orderDto), HttpStatus.CREATED);
     }
 
-    @GetMapping("{idOrder}")
+    @GetMapping("/{idOrder}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable String idOrder) {
         return new ResponseEntity<>(orderService.getOrderById(idOrder), HttpStatus.OK);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<OrderDto>> getAllOrders() {
         return new ResponseEntity<>(orderService.getAllOrders(), HttpStatus.OK);
+    }
+
+    @PutMapping("/{idOrder}")
+    public ResponseEntity<String> deleteOrder(@PathVariable String idOrder) {
+        return new ResponseEntity<>(orderService.deleteOrder(idOrder), HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<OrderDto> deleteOrder(@RequestBody OrderDto orderDto) {
+        return new ResponseEntity<>(orderService.updateOrder(orderDto), HttpStatus.OK);
     }
 
 
