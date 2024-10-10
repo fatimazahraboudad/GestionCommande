@@ -9,6 +9,9 @@ import com.project.users_service.exception.UserNotFoundException;
 import com.project.users_service.mapper.UserMapper;
 import com.project.users_service.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -46,6 +49,14 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserResponse> listOfUser() {
         return UserMapper.mapper.usersToUserResponses(userRepository.findAll());
+    }
+
+    @Override
+    public List<UserResponse> listOfUserPageable(int pageNumber, int pageSize) {
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+        List<User> users= userRepository.findAll(pageable).toList();
+        return UserMapper.mapper.usersToUserResponses(users);
+
     }
 
     @Override

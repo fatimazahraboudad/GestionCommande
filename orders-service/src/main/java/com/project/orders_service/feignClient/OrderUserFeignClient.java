@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "users-service")
+@FeignClient(name = "users-service", fallbackFactory = FallBackFactoryUser.class)
 public interface OrderUserFeignClient {
 
     @GetMapping("user/{idUser}")

@@ -28,7 +28,13 @@ spring:
       kafka:
         binder:
           brokers: localhost:9092
+    openfeign:
+        circuitbreaker:
+          enabled: true
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka
+feign:
+  circuitbreaker:
+    enabled: true

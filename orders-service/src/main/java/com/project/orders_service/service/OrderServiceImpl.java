@@ -56,10 +56,10 @@ public class OrderServiceImpl implements OrderService{
         orderProductFeignClient.decrementQuantityOfProduct(orderDto.getOrdersLine());
 
         Order order1 = orderRepository.save(order);
-        if (order1 != null) {
-            streamBridge.send("notification-topic",
-                    String.format("Your order with ID %s has been registered successfully.", order1.getIdOrder()));
-        }
+//        if (order1 != null) {
+//            streamBridge.send("notification-topic",
+//                    String.format("Your order with ID %s has been registered successfully.", order1.getIdOrder()));
+//        }
 
 
         return orderMapper.OrderToOrderDto(order1);

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "products-service")
+@FeignClient(name = "products-service",fallbackFactory = FallBackFactoryProduct.class)
 public interface OrderProductFeignClient {
 
 

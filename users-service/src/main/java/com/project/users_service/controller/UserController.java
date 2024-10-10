@@ -34,6 +34,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(idUser));
     }
 
+    @GetMapping("/{pageNumber}/{pageSize}")
+    public ResponseEntity<List<UserResponse>> getUses(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        return ResponseEntity.ok(userService.listOfUserPageable(pageNumber,pageSize));
+    }
+
     @PutMapping
     public ResponseEntity<UserResponse> updateUser(@RequestBody UserRequest userResponse) {
         UserResponse userResponse1 =userService.updateUser(userResponse);

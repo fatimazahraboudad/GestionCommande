@@ -18,7 +18,7 @@ public class Order {
 
     @Id
     private String idOrder;
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.MERGE)
     private List<OrderLine> ordersLine;
     private String idUser;
     private boolean deleted;
