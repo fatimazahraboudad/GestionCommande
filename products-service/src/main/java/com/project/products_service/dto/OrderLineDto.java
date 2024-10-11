@@ -1,14 +1,12 @@
 package com.project.products_service.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
+@ToString
 public class OrderLineDto {
 
     private String idOrderLine;

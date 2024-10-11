@@ -1,5 +1,7 @@
 package com.project.orders_service.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.orders_service.dto.OrderDto;
 import com.project.orders_service.dto.OrderLineDto;
 import com.project.orders_service.entity.Order;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,17 +35,17 @@ public class OrderServiceImpl implements OrderService{
 
 
     @Override
-    public OrderDto addOrder(OrderDto orderDto) {
+    @Transactional
+    public OrderDto addOrder(OrderDto orderDto) throws JsonProcessingException {
         orderDto.getOrdersLine().forEach(
                 orderLineDto ->{
                     if (orderLineDto.getQuantity() <= 0) {
                         throw new ProductQuantityVerification(orderLineDto.getIdProduct());
                     }
                 }
-
         );
 
-        if(!orderProductFeignClient.checkProductInStock(orderDto.getOrdersLine())){
+        if(!orderProductFeignClient.checkProductInStock(buildCheckProductInStockQuery(orderDto.getOrdersLine(),"checkProductInStock")).getData().getCheckProductInStock()){
             throw new ProductNotExistInStock();
         }
         Order order= orderMapper.OrderDtoToOrder(orderDto);
@@ -53,13 +56,14 @@ public class OrderServiceImpl implements OrderService{
         order.setIdUser(orderDto.getUserDto().getIdUser());
         order.setDeleted(false);
 
-        orderProductFeignClient.decrementQuantityOfProduct(orderDto.getOrdersLine());
+//
+        orderProductFeignClient.decrementQuantityOfProduct(buildCheckProductInStockQuery(orderDto.getOrdersLine(),"decrementQuantityOfProduct"));
 
         Order order1 = orderRepository.save(order);
-//        if (order1 != null) {
-//            streamBridge.send("notification-topic",
-//                    String.format("Your order with ID %s has been registered successfully.", order1.getIdOrder()));
-//        }
+        if (order1 != null) {
+            streamBridge.send("notification-topic",
+                    String.format("Your order with ID %s has been registered successfully.", order1.getIdOrder()));
+        }
 
 
         return orderMapper.OrderToOrderDto(order1);
@@ -100,8 +104,6 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-
-
     @Override
     public String deleteOrder(String idOrder) {
         Order order = helper(idOrder);
@@ -111,7 +113,6 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-
     public Order helper(String idOrder) {
         return orderRepository.findById(idOrder).filter(order -> !order.isDeleted()).orElseThrow(()->new OrderNotExistException(idOrder));
 
@@ -119,4 +120,19 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
+    public static String buildCheckProductInStockQuery(List<OrderLineDto> orderLineDtos, String function) {
+        String orderLineDtosString = orderLineDtos.stream()
+                .map(orderLine -> String.format(
+                        "{ idOrderLine: \\\"%s\\\", idProduct: \\\"%s\\\", quantity: %d }",
+                        orderLine.getIdOrderLine(),
+                        orderLine.getIdProduct(),
+                        orderLine.getQuantity()))
+                .collect(Collectors.joining(", "));
+
+        return String.format(
+                "{\"query\": \"mutation { "+function+"(orderLineDtos: [%s]) }\"}",
+                orderLineDtosString);
     }
+
+
+}

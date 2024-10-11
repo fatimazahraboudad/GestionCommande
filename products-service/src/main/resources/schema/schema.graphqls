@@ -2,6 +2,8 @@ type Mutation {
     addProduct( productDto: ProductDto): Product
     updateProduct(idProduct:String, productDto:ProductDto): Product
     deleteProduct(idProduct:String): String
+    checkProductInStock(orderLineDtos : [orderLineDto]): Boolean
+    decrementQuantityOfProduct(orderLineDtos : [orderLineDto]): String
 }
 
 type Query{
@@ -24,5 +26,10 @@ input ProductDto{
     price : Float,
     quantity : Int
 }
-
+input orderLineDto{
+    idOrderLine : String
+    idProduct : String
+    quantity : Int
+    idOrder : String
+}
 

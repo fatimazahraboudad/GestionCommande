@@ -63,13 +63,12 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public String decrementQuantityOfProduct(List<OrderLineDto> orderLineDto) {
+    public void decrementQuantityOfProduct(List<OrderLineDto> orderLineDto) {
         orderLineDto.forEach(orderLineDto1 -> {
             Product product= helper(orderLineDto1.getIdProduct());
             product.setQuantity(product.getQuantity()-orderLineDto1.getQuantity());
             productRepository.save(product);
         });
-        return "test";
     }
 
     public Product helper(String idProduct) {
