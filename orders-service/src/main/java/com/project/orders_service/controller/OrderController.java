@@ -6,10 +6,13 @@ import com.project.orders_service.dto.OrderLineDto;
 import com.project.orders_service.dto.UserDto;
 import com.project.orders_service.feignClient.OrderUserFeignClient;
 import com.project.orders_service.service.OrderService;
+import com.project.orders_service.validation.AddGroup;
+import com.project.orders_service.validation.UpdateGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class OrderController {
 
 
     @PostMapping
-    public ResponseEntity<OrderDto> addOrder(@RequestBody OrderDto orderDto) throws JsonProcessingException {
+    public ResponseEntity<OrderDto> addOrder(@Validated(AddGroup.class) @RequestBody OrderDto orderDto) throws JsonProcessingException {
         return new ResponseEntity<>(orderService.addOrder(orderDto), HttpStatus.CREATED);
 
 
@@ -47,7 +50,7 @@ public class OrderController {
     }
 
     @PutMapping
-    public ResponseEntity<OrderDto> deleteOrder(@RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderDto> updateOrder(@Validated(UpdateGroup.class) @RequestBody OrderDto orderDto) {
         return new ResponseEntity<>(orderService.updateOrder(orderDto), HttpStatus.OK);
     }
 

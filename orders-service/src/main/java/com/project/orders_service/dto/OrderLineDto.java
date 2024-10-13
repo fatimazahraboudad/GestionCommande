@@ -17,6 +17,5 @@ public class OrderLineDto {
     private String idProduct;
     private int quantity;
 
-    private String idOrder;
 
 }
